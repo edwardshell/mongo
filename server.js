@@ -87,19 +87,33 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
+app.get("/saved", function(req, res) {
+  db.Saved.find({})
+    .then(function(dbSaved) {
+      res.json(dbSaved);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+  // res.sendFile(path.join(__dirname, "./public/saved.html"));
+});
+
 app.post("/saved", function(req, res) {
-  db.Saved.create(req.body).then(function(dbSaved) {
-    return db.Article.findOne(
-      { _id: req.params.id },
-      { title: dbSaved.data.title },
-      { summary: dbSaved.data.summary },
-      { link: dbArticle.data.link }
-    );
-  }).then(function(dbArticle) {
-    res.json(dbArticle);
-  }).catch(function(err) {
-    res.json(err);
-  })
+  db.Saved.create(req.body)
+    .then(function(dbSaved) {
+      return db.Article.findOne(
+        { _id: req.params.id },
+        { title: dbSaved.data.title },
+        { summary: dbSaved.data.summary },
+        { link: dbArticle.data.link }
+      );
+    })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
 });
 
 app.listen(PORT, function() {

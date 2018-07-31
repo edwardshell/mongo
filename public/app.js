@@ -1,9 +1,7 @@
 $.getJSON("/articles", function(data) {
   for (var i = 0; i < data.length; i++) {
     $("#articles").append(
-      "<div class='indArticle'><h3 data-id='" +
-        data[i]._id +
-        "'>" +
+      "<div class='indArticle'><h3>" +
         data[i].title +
         "</h3><p>" +
         data[i].summary +
@@ -30,7 +28,7 @@ $(document).on("click", "#save", function() {
       link: this.link
     }
   }).then(function(data) {
-   console.log(data);
+    console.log(data);
     $.ajax({
       method: "POST",
       url: "/saved/",
@@ -40,7 +38,8 @@ $(document).on("click", "#save", function() {
         link: data.link
       }
     }).then(function(data) {
-      console.log(data)
-    })
+      console.log(data.data);
+    });
   });
 });
+
