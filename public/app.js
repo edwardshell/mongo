@@ -18,16 +18,29 @@ $.getJSON("/articles", function(data) {
   }
 });
 
-// $(document).on("click", "#save", function() {
-//   var thisId = $(this).attr("data-id");
+$(document).on("click", "#save", function() {
+  var thisId = $(this).attr("data-id");
 
-//   console.log(thisId);
-
-//   $.ajax({
-//     method: "GET",
-//     url: "/articles/" + thisId
-//   }).then(function(data) {
-//     res.json(data);
-    
-//   });
-// });
+  $.ajax({
+    method: "GET",
+    url: "/articles/" + thisId,
+    data: {
+      title: this.title,
+      summary: this.summary,
+      link: this.link
+    }
+  }).then(function(data) {
+   console.log(data);
+    $.ajax({
+      method: "POST",
+      url: "/saved/",
+      data: {
+        title: data.title,
+        summary: data.summary,
+        link: data.link
+      }
+    }).then(function(data) {
+      console.log(data)
+    })
+  });
+});

@@ -87,19 +87,19 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
-app.get("/saved", function(req, res) {
-  $(document).on("click", "#save", function() {
-    var thisId = $(this).attr("data-id");
-
-    console.log(thisId);
-
-    $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
-    }).then(function(data) {
-      res.json(data);
-    });
-  });
+app.post("/saved", function(req, res) {
+  db.Saved.create(req.body).then(function(dbSaved) {
+    return db.Article.findOne(
+      { _id: req.params.id },
+      { title: dbSaved.data.title },
+      { summary: dbSaved.data.summary },
+      { link: dbArticle.data.link }
+    );
+  }).then(function(dbArticle) {
+    res.json(dbArticle);
+  }).catch(function(err) {
+    res.json(err);
+  })
 });
 
 app.listen(PORT, function() {
